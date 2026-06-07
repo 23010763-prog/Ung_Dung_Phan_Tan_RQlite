@@ -66,4 +66,25 @@ curl -G 'localhost:4001/db/query?pretty' --data-urlencode 'q=SELECT * FROM foo'
 - [Sign up for Office Hours](https://rqlite.io/office-hours)
 
 ## Pronunciation
-Common pronunciations of rqlite include "R Q lite" and "ree-qwell-lite".
+Common pronunciations of rqlite include "R Q lite" and "ree-qwell-lite".Cách chạy demo đầy đủ
+Sau khi cấu trúc đúng, quy trình demo như sau:
+1. Khởi động cluster — mở 3 CMD, lần lượt chạy:
+cmd:: CMD 1
+docker run -p 4001:4001 --name rqlite-node1 --network rqlite-net rqlite/rqlite -node-id node1 -http-addr 0.0.0.0:4001 -raft-addr 0.0.0.0:4002
+
+:: CMD 2  
+docker run -p 4003:4001 --name rqlite-node2 --network rqlite-net rqlite/rqlite -node-id node2 -http-addr 0.0.0.0:4001 -raft-addr 0.0.0.0:4002 -join rqlite-node1:4002
+
+:: CMD 3
+docker run -p 4005:4001 --name rqlite-node3 --network rqlite-net rqlite/rqlite -node-id node3 -http-addr 0.0.0.0:4001 -raft-addr 0.0.0.0:4002 -join rqlite-node1:4002
+2. Chạy demo cơ bản:
+cmdcd basic_demo
+python demo_basic.py
+3. Chạy Dashboard (Tính năng 1):
+cmdcd feature1_dashboard
+python app.py
+:: Mở trình duyệt vào http://localhost:5000
+4. Chạy Benchmark (Tính năng 2):
+cmdcd feature2_benchmark
+python benchmark.py
+python draw_chart.py
